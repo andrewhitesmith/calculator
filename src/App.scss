@@ -1,0 +1,59 @@
+@font-face {
+  @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap');
+  font-family: 'Source Sans Pro', sans-serif;
+}
+.calculator-body {
+  font-family: 'Source Sans Pro', sans-serif;
+  background-color: #000;
+  font-size: 36px;
+  max-width: 500px;
+  margin: 0 auto;
+  color: #fff;
+  user-select:none;
+  padding-bottom: 20px;
+  .result {
+    text-align: right;
+    font-size: 66px;
+    height: 80px;
+    padding: 90px 20px 0;
+  }
+  .calculator-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    span {
+      width: 100px;
+      height: 100px;
+      border-radius: 100%;
+      text-align: center;
+      line-height: 102px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    .additional-button {
+      background-color: #ccc;
+      color: #000;
+    }
+    .calculate-button {
+      background-color: orange;
+      font-size: 50px;
+      font-weight: 200;
+      line-height: 90px;
+    }
+    .active {
+      background-color: #fff;
+      color: orange;
+    }
+    .number-button,
+    .zero-button,
+    .coma-button  {
+      background-color: #323131;
+      color: #fff;
+    }
+    .zero-button {
+      width: calc( 100px * 2 + 20px);
+      border-radius: 50px;
+    }
+  }
+}
