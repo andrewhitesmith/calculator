@@ -39,7 +39,7 @@
       background-color: orange;
       font-size: 50px;
       font-weight: 200;
-      line-height: 90px;
+      line-height: 1.9em;
     }
     .active {
       background-color: #fff;
@@ -50,6 +50,10 @@
     .coma-button  {
       background-color: #323131;
       color: #fff;
+      transition: background-color .3s ease;
+    }
+    .number-button:active {
+      background-color: #817c7c;
     }
     .zero-button {
       width: calc( 100px * 2 + 20px);

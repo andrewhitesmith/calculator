@@ -1,6 +1,5 @@
-import logo from './logo.svg';
 import './App.scss';
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 
 function App() {
     const [number, setNumber] = useState('0'); // цифра ничего
@@ -11,7 +10,7 @@ function App() {
     const [isDivActive, setIsDivActive] = useState(false);
     const [action, setAction] = useState('');
     const [pointChecker, setPointChecker] = useState(false);
-    const [changeChecker, setChangeChecker] = useState(false);
+
     useEffect(() => {
         if (number.toString().includes(".")) {
             setPointChecker(true);
@@ -35,130 +34,98 @@ function App() {
             setNumber(number.toExponential(2));
         }
     }, [number]);
+
+    useEffect(() => {
+        if (isMinusActive) {
+            setIsMultActive(false);
+            setIsDivActive(false);
+            setIsPlusActive(false);
+        }
+    }, [isMinusActive]);
+
+    useEffect(() => {
+        if (isMultActive) {
+            setIsMinusActive(false);
+            setIsDivActive(false);
+            setIsPlusActive(false);
+        }
+    }, [isMultActive]);
+
+    useEffect(() => {
+        if (isDivActive) {
+            setIsMinusActive(false);
+            setIsMultActive(false);
+            setIsPlusActive(false);
+        }
+    }, [isDivActive]);
+
+    useEffect(() => {
+        if (isPlusActive) {
+            setIsMinusActive(false);
+            setIsMultActive(false);
+            setIsDivActive(false);
+        }
+    }, [isPlusActive]);
+
     function typeNumber(event) {
         let newNumber = number + event.target.innerText;
+
         if (number === "0") {
             newNumber = event.target.innerText;
         }
+
         if (isPlusActive) {
-            setNumber("0");
             setNumber(event.target.innerText);
             setIsPlusActive(false);
         } else if (isMinusActive) {
-            setNumber("0");
             setNumber(event.target.innerText);
             setIsMinusActive(false);
         } else if (isMultActive) {
-            setNumber("0");
             setNumber(event.target.innerText);
             setIsMultActive(false);
         } else if (isDivActive) {
-            setNumber("0");
             setNumber(event.target.innerText);
             setIsDivActive(false);
         } else {
             setNumber(newNumber);
         }
     }
-    function sum(event) {
-        if (action === "+" && !isPlusActive) {
+
+    function doSomeMath(actionSymbol, actionButton, setActionButton) {
+        if (action === actionSymbol && !actionButton) {
             let resultNumber = parseInt(firstNumber) + parseInt(number);
             setNumber(resultNumber);
             setFirstNumber(resultNumber);
-        } else if (action !== "" && !isPlusActive && !isMultActive && !isDivActive && !isMinusActive) {
+        } else if (action !== "") {
             result();
         } else {
             setFirstNumber(number);
         }
-        setIsMinusActive(false);
-        setIsMultActive(false);
-        setIsDivActive(false);
-        setIsPlusActive(true);
-        setAction("+");
+        setAction(actionSymbol);
+        setActionButton(true);
     }
-    function difference(event) {
-        if (action === "-" && !isMinusActive) {
-            console.log(number, "start num");
-            console.log(firstNumber, "start first");
-            let resultNumber = parseInt(firstNumber) - parseInt(number);
-            setNumber(resultNumber);
-            setFirstNumber(resultNumber);
-        } else if (action !== "" && !isPlusActive && !isMultActive && !isDivActive && !isMinusActive) {
-            result();
-            console.log(number, "mid");
-            console.log(firstNumber, "mid");
-            } else {
-            setFirstNumber(number);
-            console.log(number, "end");
-            console.log(firstNumber, "end");
-        }
-        setIsPlusActive(false);
-        setIsMultActive(false);
-        setIsDivActive(false);
-        setAction("-");
-        setIsMinusActive(true);
-    }
-    function multiply(event) {
-        if (action === "&#215;" && !isMultActive) {
-            let resultNumber = parseInt(firstNumber) * parseInt(number);
-            setNumber(resultNumber);
-            setFirstNumber(resultNumber);
-        } else if (action !== "" && !isPlusActive && !isMultActive && !isDivActive && !isMinusActive) {
-            result();
-        } else {
-
-            setFirstNumber(number);
-        }
-        console.log(number);
-        console.log(firstNumber);
-        setIsPlusActive(false);
-        setIsMinusActive(false);
-        setIsDivActive(false);
-        setAction("&#215;");
-        setIsMultActive(true);
-    }
-    function divide(event) {
-        if (action === "÷" && !isDivActive) {
-            let resultNumber = parseInt(firstNumber) / parseInt(number);
-            setNumber(resultNumber);
-            setFirstNumber(resultNumber);
-        } else if (action !== "" && !isPlusActive && !isMultActive && !isDivActive && !isMinusActive) {
-            result();
-        } else {
-            setFirstNumber(number);
-        }
-        setIsMinusActive(false);
-        setIsPlusActive(false);
-        setIsMultActive(false);
-        setAction("÷");
-        setIsDivActive(true);
-    }
-    function percentage(event) {
+    function percentage() {
         let perc = number / 100;
         setNumber(perc);
-        console.log(number, "number");
-        console.log(perc, "perc");
     }
     function change(event) {
         if  (number.toString().includes("-")) {
             setNumber(number.toString().slice(1, number.toString().length));
-            setChangeChecker(true);
         } else {
-            setChangeChecker(false);
             setNumber("-" + number);
         }
         if (number.toString() === "0") {
             setNumber(number);
         }
     }
-    function coma(event) {
+    function coma() {
         let point = ".";
         if (!pointChecker) {
             setNumber(number + point);
             setPointChecker(true);
         }
     }
-    function clear(event) {
+    function clear() {
         setNumber("0");
         setIsPlusActive(false);
         setIsMinusActive(false);
@@ -166,7 +133,8 @@ function App() {
         setIsDivActive(false);
         setAction("");
     }
-    function result(event) {
+
+    function result() {
         let resultNumber = 0;
         if (action === "+") {
             resultNumber = parseFloat(firstNumber) + parseFloat(number);
@@ -183,12 +151,15 @@ function App() {
         } else if (action === "") {
             resultNumber = number;
         }
-        // let resStr = resultNumber.toString();
-        // if (resStr.length > 11) {
-        //     resultNumber = resultNumber.toExponential(2);
-        // }
-        // Придумал велосипед, вместо вверхних трёх строчек полностью написал логику T-T
 
+        let resStr = resultNumber.toString();
+        if (resStr.length > 11) {
+            resultNumber = resultNumber.toExponential(2);
+        }
+        setNumber(resultNumber);
+        setFirstNumber(resultNumber);
+        setAction("");
+        // Придумал велосипед, вместо вверхних трёх строчек полностью написал логику T-T
         // if (resStr.includes("e")) {
         //     let indexE = resStr.indexOf("e");
         //     let indexDot = resStr.indexOf(".");
@@ -205,7 +176,7 @@ function App() {
         //         resultNumber = resultNumber.toString().slice(0, -1);
         //     }
         // }
-        setNumber(resultNumber);
+
     }
   return (
     <div className="calculator-body">
@@ -214,25 +185,25 @@ function App() {
             <span onClick={clear} className="additional-button">C</span>
             <span onClick={change} className="additional-button">+/-</span>
             <span onClick={percentage} className="additional-button">%</span>
-            <span onClick={divide} className={`calculate-button ${isDivActive ? 'active' : ''}`}>÷</span>
+            <span onClick={() => doSomeMath("÷", isDivActive, setIsDivActive)} className={`calculate-button ${isDivActive ? 'active' : ''}`}>÷</span>
         </div>
         <div className="calculator-row">
             <span onClick={typeNumber} className="number-button">7</span>
             <span onClick={typeNumber} className="number-button">8</span>
             <span onClick={typeNumber} className="number-button">9</span>
-            <span onClick={multiply} className={`calculate-button ${isMultActive ? 'active' : ''}`}>&#215;</span>
+            <span onClick={() => doSomeMath("&#215;", isMultActive, setIsMultActive)} className={`calculate-button ${isMultActive ? 'active' : ''}`}>&#215;</span>
         </div>
         <div className="calculator-row">
             <span onClick={typeNumber} className="number-button">4</span>
             <span onClick={typeNumber} className="number-button">5</span>
             <span onClick={typeNumber} className="number-button">6</span>
-            <span onClick={difference} className={`calculate-button ${isMinusActive ? 'active' : ''}`}>-</span>
+            <span onClick={() => doSomeMath("-", isMinusActive, setIsMinusActive)} className={`calculate-button ${isMinusActive ? 'active' : ''}`}>-</span>
         </div>
         <div className="calculator-row">
             <span onClick={typeNumber} className="number-button">1</span>
             <span onClick={typeNumber} className="number-button">2</span>
             <span onClick={typeNumber} className="number-button">3</span>
-            <span onClick={sum} className={`calculate-button ${isPlusActive ? 'active' : ''}`}>+</span>
+            <span onClick={() => doSomeMath("+", isPlusActive, setIsPlusActive)} className={`calculate-button ${isPlusActive ? 'active' : ''}`}>+</span>
         </div>
         <div className="calculator-row">
             <span onClick={typeNumber} className="zero-button">0</span>
